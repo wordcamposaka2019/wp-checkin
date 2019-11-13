@@ -6,9 +6,13 @@ export class SearchBox extends React.Component {
   constructor(props) {
     super( props );
     this.state = {
-      s: '',
+      s: props.s,
       timer: null
     };
+
+    if ( this.state.s ) {
+      this.props.onSubmit( this.state.s );
+    }
   }
 
   onChangeHandler( text ) {

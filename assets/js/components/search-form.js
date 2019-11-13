@@ -51,7 +51,7 @@ export class SearchForm extends Component {
   render(){
     return (
       <div className='search'>
-        <SearchBox onSubmit={ text => this.onSubmit( text ) } />
+        <SearchBox s={ this.props.s } onSubmit={ text => this.onSubmit( text ) } />
 
         <hr />
 
@@ -66,7 +66,9 @@ export class SearchForm extends Component {
                 <th>#</th>
                 <th>名前</th>
                 <th>種別</th>
+                <th>役</th>
                 <th>メール</th>
+                <th>チェックイン</th>
                 <th>アクション</th>
               </tr>
             </thead>
@@ -76,8 +78,10 @@ export class SearchForm extends Component {
                   <tr ref={ ticket.id }>
                     <th>{ticket.id}</th>
                     <td>{ticket.familyname} {ticket.givenname}</td>
+                    <td>{ticket.category}</td>
                     <td>{ticket.role}</td>
                     <td>{ticket.email}</td>
+                    <td>{ticket.checkedin}</td>
                     <td>
                       <button className='btn btn-primary' onClick={ e => this.setState( { active: ticket.id} ) }>表示</button>
                     </td>

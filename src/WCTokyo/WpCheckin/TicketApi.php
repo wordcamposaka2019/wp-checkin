@@ -35,23 +35,24 @@ class TicketApi extends Singleton {
 	
 	public function handle_qr( Request $request, Response $response, array $args ) {
 		try {
-			$queries = [];
-			foreach ( [ 'f', 'g', 'e' ] as $key ) {
-				if ( $param = $request->getQueryParam( $key ) ) {
-					$queries[] = $param;
-				}
-			}
-			if ( ! $queries ) {
-				throw new \Exception( 'No queries set.' );
-			}
-			$result = $this->search( $queries );
-			if ( 1 !== count( $result) ) {
-				throw new \Exception( 'Not found.' );
-			}
-			list( $data ) = $result;
-			$url = sprintf( 'https://2019.tokyo.wp-checkin.com/ticket/%d', $data['id'] );
+//			$queries = [];
+//			foreach ( [ 'f', 'g', 'e' ] as $key ) {
+//				if ( $param = $request->getQueryParam( $key ) ) {
+//					$queries[] = $param;
+//				}
+//			}
+//			if ( ! $queries ) {
+//				throw new \Exception( 'No queries set.' );
+//			}
+//			$result = $this->search( $queries );
+//			if ( 1 !== count( $result) ) {
+//				throw new \Exception( 'Not found.' );
+//			}
+//			list( $data ) = $result;
+            $param = $request->getQueryParam('s');
+			$url = sprintf( 'https://wco2019.unplat.info/?s=%s', $param );
 		} catch ( \Exception $e ) {
-			$url = 'https://2019.tokyo.wp-checkin.com';
+			$url = 'https://wco2019.unplat.info';
 		} finally {
 			$src = str_replace( '&amp;', '&', $this->generate_qr( $url ) );
 			$content = file_get_contents( $src );
@@ -228,9 +229,11 @@ class TicketApi extends Singleton {
 		// Add role.
 		$role = '一般参加';
 		foreach ( [
-			'wct-sponsor-2019' => 'スポンサー',
-			'wct-staff-2019'   => 'スタッフ',
-			'wct-speaker-2019' => 'スピーカー',
+                      'WCOSAKA2019-CONTRIBUTE' => 'コントリビューター',
+                      'WCOSAKA2019-STAFF' => 'スタッフ',
+                      'WCOSAKA2019-SPEAKER' => 'スピーカー',
+                      'WCOSAKA2019-STUDENT' => '学生',
+                      'wct-sponsor-2019' => 'スポンサー',
 		] as $coupon => $label ) {
 			if ( isset( $data['coupon'] ) && false !== strpos( $data['coupon'], $coupon ) ) {
 				$role = $label;

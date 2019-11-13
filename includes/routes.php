@@ -28,9 +28,9 @@ $app->post( '/ticket/{ticket_id}/detail', [ TicketApi::get_instance(), 'handle_p
 $app->delete( '/ticket/{ticket_id}/detail', [ TicketApi::get_instance(), 'handle_delete' ] );
 
 // QR code
-$app->get( '/qr/{ticket_id}', function(Request $request, Response $response, array $args) {
+$app->get( '/qr/', function(Request $request, Response $response, array $args) {
 	// Render QR view.
-	$alt = sprintf( 'https://2019.tokyo.wp-checkin.com/ticket/%d', $args['ticket_id'] );
+	$alt = sprintf( 'https://wco2019.unplat.info/?s=%s', $request->getParam('s') );
 	$url = TicketApi::get_instance()->generate_qr( $alt );
 	return $this->renderer->render($response, 'qr.phtml', [
 		'url' => $url,

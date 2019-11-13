@@ -1,5 +1,5 @@
 # wp-checkin
-A checking helper for [WordCamp Tokyo 2019](https://2019.tokyo.wordcamp.org)
+A checking helper for [WordCamp Osaka 2019](https://2019.tokyo.wordcamp.org)
 
 ## インストール
 
