@@ -16,6 +16,7 @@ export class SearchForm extends Component {
       tickets: [],
       active: 0,
       loading: false,
+      reload: false
     };
   }
 
@@ -25,8 +26,10 @@ export class SearchForm extends Component {
       return;
     }
     this.setState( {
+      text: text,
       loading: true,
       active: 0,
+      reload: false,
       tickets: [],
     }, () => {
       fetchApi( '/search?s=' + encodeURIComponent( text ) )
@@ -49,6 +52,9 @@ export class SearchForm extends Component {
   }
 
   render(){
+    if (this.state.reload === true) {
+      this.onSubmit(this.state.text);
+    }
     return (
       <div className='search'>
         <SearchBox s={ this.props.s } onSubmit={ text => this.onSubmit( text ) } />
@@ -99,7 +105,7 @@ export class SearchForm extends Component {
         { this.state.active ? (
           <div className='backdrop'>
             <div className='backdrop-inner'>
-              <button className='btn btn-link backdrop-close' onClick={ e => this.setState( { active: 0 } ) }>閉じる</button>
+              <button className='btn btn-link backdrop-close' onClick={ e => this.setState( { active: 0, reload: true } ) }>閉じる</button>
               <h3 className='text-center'>チケット詳細</h3>
               <div className='ticket-wrapper'>
                 <Ticket id={ this.state.active } />

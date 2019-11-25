@@ -243,6 +243,60 @@ class TicketApi extends Singleton {
 		if ( false !== strpos( $data['category'], 'マイクロスポンサー' ) ) {
 			 $role = 'マイクロスポンサー';
 		}
+		foreach ([
+                     'WCOSAKA2019-SAR44Z' => 'JetPack',
+                     'WCOSAKA2019-SOR44Z' => 'JetPack',
+                     'WCOSAKA2019-SAQCJI' => 'WooCommerce',
+                     'WCOSAKA2019-SOQCJI' => 'WooCommerce',
+                     'WCOSAKA2019-SA6R1H' => 'bluehost',
+                     'WCOSAKA2019-SO6R1H' => 'bluehost',
+                     'WCOSAKA2019-SA6Y5E' => 'GoDaddy',
+                     'WCOSAKA2019-SO6Y5E' => 'GoDaddy',
+                     'WCOSAKA2019-SAH07T' => 'HubSpot',
+                     'WCOSAKA2019-SOH07T' => 'HubSpot',
+                     'WCOSAKA2019-SA1D1E' => 'PayPal',
+                     'WCOSAKA2019-SO1D1E' => 'PayPal',
+                     'WCOSAKA2019-SAPBP9' => 'Sakura Internet',
+                     'WCOSAKA2019-SOPBP9' => 'Sakura Internet',
+                     'WCOSAKA2019-SOLNM7' => 'WelCart',
+                     'WCOSAKA2019-SOS1MT' => 'SITEGUARD',
+                     'WCOSAKA2019-SOPM5G' => 'HAMWORKS',
+                     'WCOSAKA2019-SOQ7LL' => 'LIQUID PRESS',
+                     'WCOSAKA2019-SO5GNI' => 'cookbiz',
+                     'WCOSAKA2019-SA7B55' => 'GMOペパボ',
+                     'WCOSAKA2019-SO7B55' => 'GMOペパボ',
+                     'WCOSAKA2019-SALKNH' => 'GMOペパボ',
+                     'WCOSAKA2019-SOLKNH' => 'GMOペパボ',
+                     'WCOSAKA2019-SAM23L' => 'エックスサーバー',
+                     'WCOSAKA2019-SOM23L' => 'エックスサーバー',
+                     'WCOSAKA2019-SO3D3X' => 'プライムストラテジー',
+                     'WCOSAKA2019-SA0YD6' => 'モリサワ',
+                     'WCOSAKA2019-SO0YD6' => 'モリサワ',
+                     'WCOSAKA2019-SA6WHH' => 'Pantheon',
+                     'WCOSAKA2019-SO6WHH' => 'Pantheon',
+                     'WCOSAKA2019-SAB5K2' => 'アズポケット',
+                     'WCOSAKA2019-SOB5K2' => 'アズポケット',
+                     'WCOSAKA2019-SAPQ3G' => 'GMOクラウド',
+                     'WCOSAKA2019-SOPQ3G' => 'GMOクラウド',
+                     'WCOSAKA2019-SANS20' => 'Weglot',
+                     'WCOSAKA2019-SONS20' => 'Weglot',
+                     'WCOSAKA2019-SA6G14' => '職人工房',
+                     'WCOSAKA2019-SO6G14' => '職人工房',
+                     'WCOSAKA2019-SA43QT' => 'カゴヤジャパン',
+                     'WCOSAKA2019-SO43QT' => 'カゴヤジャパン',
+                     'WCOSAKA2019-SAPP7F' => 'SBテクノロジー',
+                     'WCOSAKA2019-SOPP7F' => 'SBテクノロジー',
+                     'WCOSAKA2019-SAL4L0' => 'モンキーレンチ',
+                     'WCOSAKA2019-SOL4L0' => 'モンキーレンチ',
+                     'WCOSAKA2019-SOR21T' => 'クリーク・アンド・リバー',
+                     'WCOSAKA2019-SAO15B' => 'SiteGround',
+                     'WCOSAKA2019-SO1TQA' => 'Kinsta',
+                 ] as $coupon => $label) {
+            if ( isset( $data['coupon'] ) && false !== strpos( $data['coupon'], $coupon ) ) {
+                $role = 'スポンサー: '  .$label;
+                break;
+            }
+        }
 		$data['role'] = $role;
 		$sorted       = [
 			'familyname' => $data['familyname'],
@@ -268,11 +322,10 @@ class TicketApi extends Singleton {
 		$document['items'] = [
 			'パンフレット',
 			'ストラップ',
-			'ギグバンド' . ( $document['u20'] ? '（緑）' : '（黄色）' ),
-			'ナップサック',
+			'シール' . ( $document['u20'] ? '（成人）' : '（未成年）' ),
 		];
-		if ( false !== strpos( $document['role'], 'スポンサー' ) ) {
-			$tshirt = 'Tシャツ（グレイ）';
+		if ( false !== strpos( $document['role'], 'マイクロスポンサー' ) ) {
+			$tshirt = 'パーカー（マイクロスポンサー）';
 			if ( ! empty( $document['tshirtsize'] ) ) {
 				$tshirt .= ' - ' . $document['tshirtsize'];
 			} else {
@@ -281,7 +334,7 @@ class TicketApi extends Singleton {
 			$document['items'][] = $tshirt;
 		}
 		if ( false !== strpos( $document['role'], 'スピーカー' ) ) {
-			$document['items'][] = 'Tシャツ（緑） - 要サイズ確認';
+			$document['items'][] = 'パーカー（スピーカー）';
 		}
 		
 		return $document;
