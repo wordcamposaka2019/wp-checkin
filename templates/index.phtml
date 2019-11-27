@@ -2,7 +2,8 @@
 	
 	<header class="page-header">
 		<h1 class="page-header-title">チケット検索</h1>
-		<p class="lead">来場者のメールアドレス、姓、名より検索できます。</p>
+		<p class="lead">来場者のメールアドレス<?php if (empty($_GET['m'])): ?>、姓、名<?php endif; ?>より検索できます。</p>
+        <?php if (!empty($_GET['m'])): ?><a href="/">名前検索はこちら</a><?php endif; ?>
 	</header>
 
 	<hr />

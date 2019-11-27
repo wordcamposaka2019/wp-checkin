@@ -22,11 +22,16 @@ class TicketApi extends Singleton {
 	public function handle_search( Request $request, Response $response, array $args ) {
 		try {
 			$query = $request->getQueryParam( 's' );
-			if ( ! $query ) {
+            $email = $request->getQueryParam('m');
+			if ( ! $query && ! $email) {
 				throw new \Exception( '検索キーワードが指定されていません。', 404 );
 			}
-			$query = explode( ' ', str_replace( '　', ' ', $query ) );
-			$result = $this->search( $query );
+			$query = str_replace('　', '', $query);
+			$queryStrings = [];
+			if (!empty($query)) {
+                $queryStrings = explode( ' ', $query );
+            }
+			$result = $this->search( $queryStrings , $email);
 			return $response->withJson( $result );
 		} catch ( \Exception $e ) {
 			return $response->withJson( [], 404 );
@@ -49,8 +54,8 @@ class TicketApi extends Singleton {
 //				throw new \Exception( 'Not found.' );
 //			}
 //			list( $data ) = $result;
-            $param = $request->getQueryParam('s');
-			$url = sprintf( 'https://wco2019.unplat.info/?s=%s', $param );
+            $param = $request->getQueryParam('m');
+			$url = sprintf( 'https://wco2019.unplat.info/?m=%s', $param );
 		} catch ( \Exception $e ) {
 			$url = 'https://wco2019.unplat.info';
 		} finally {
@@ -82,36 +87,42 @@ class TicketApi extends Singleton {
 		$url .= implode( '&amp;', $queries );
 		return $url;
 	}
-	
-	/**
-	 * Search tickets.
-	 *
-	 * @param string[] $query
-	 *
-	 * @return array[]
-	 */
-	private function search( $query ) {
-		$result = [];
-		$tickets = FireBase::get_instance()
-						   ->db()
-						   ->collection( 'Tickets' )
-						   ->documents();
-		foreach ( $tickets as $ticket ) {
-			/** @var DocumentSnapshot $ticket */
-			if ( ! $ticket->exists() ) {
-				continue;
-			}
-			$data  = $this->convert_to_array( $ticket );
-			$string = implode( '', $data );
-			foreach ( $query as $q ) {
-				if ( false === strpos( $string, $q ) ) {
-					continue 2;
-				}
-			}
-			$result[] = $data;
-		}
-		return $result;
-	}
+
+    /**
+     * Search tickets.
+     *
+     * @param string[] $query
+     * @param string $email
+     *
+     * @return array[]
+     */
+    private function search( $query , $email) {
+        $result = [];
+        $collection = FireBase::get_instance()
+            ->db()
+            ->collection('Tickets');
+        if (!empty($email)) {
+            $tickets  =$collection->where('email', '=', $email)
+                ->documents();
+        } else {
+            $tickets = $collection->documents();
+        }
+        foreach ( $tickets as $ticket ) {
+            /** @var DocumentSnapshot $ticket */
+            if ( ! $ticket->exists() ) {
+                continue;
+            }
+            $data  = $this->convert_to_array( $ticket );
+            $string = implode( '', $data );
+            foreach ( $query as $q ) {
+                if ( false === strpos( $string, $q ) ) {
+                    continue 2;
+                }
+            }
+            $result[] = $data;
+        }
+        return $result;
+    }
 	
 	/**
 	 * Returns JSON.
