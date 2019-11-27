@@ -52,9 +52,6 @@ export class SearchForm extends Component {
   }
 
   render(){
-    if (this.state.reload === true) {
-      this.onSubmit(this.state.text);
-    }
     return (
       <div className='search'>
         <SearchBox s={ this.props.s } onSubmit={ text => this.onSubmit( text ) } />
@@ -87,7 +84,7 @@ export class SearchForm extends Component {
                     <td>{ticket.category}</td>
                     <td>{ticket.role}</td>
                     <td>{ticket.email}</td>
-                    <td>{ticket.checkedin}</td>
+                    <td>{ticket.checkedin ? (<i className="fas fa-check"></i>) : null}</td>
                     <td>
                       <button className='btn btn-primary' onClick={ e => this.setState( { active: ticket.id} ) }>表示</button>
                     </td>
@@ -105,7 +102,7 @@ export class SearchForm extends Component {
         { this.state.active ? (
           <div className='backdrop'>
             <div className='backdrop-inner'>
-              <button className='btn btn-link backdrop-close' onClick={ e => this.setState( { active: 0, reload: true } ) }>閉じる</button>
+              <button className='btn btn-link backdrop-close' onClick={ e => this.setState( { active: 0 } ) }>閉じる</button>
               <h3 className='text-center'>チケット詳細</h3>
               <div className='ticket-wrapper'>
                 <Ticket id={ this.state.active } />
