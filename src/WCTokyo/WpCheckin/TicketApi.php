@@ -254,6 +254,20 @@ class TicketApi extends Singleton {
 		if ( false !== strpos( $data['category'], 'マイクロスポンサー' ) ) {
 			 $role = 'マイクロスポンサー';
 		}
+		$category = '';
+		foreach ([
+		    '12/7 – お弁当チケット' => 'お弁当',
+            '12/7 \'- 懇親会チケット/After Party Ticket (December 7th)' => '12/7 懇親会',
+            '12/7 \'- セッションチケット/Session Ticket (December 7th)' => '12/7 セッション',
+            '12/7 \'- マイクロスポンサーチケット/Micro Sponsor Ticket  (December 7th)' => '12/7 マイクロ',
+            '12/7 –  学生チケット/Student Ticket (December 7th)' => '12/7 学生',
+            '12/6 – コントリビューターデイチケット/Contributor Day Ticket (Day 1: December 6th)' => '12/6 コントリ',
+                 ] as $key => $val) {
+            if ($data['category'] === $key) {
+                $category = $val;
+            }
+        }
+		$data['category'] = !empty($category) ? $category : $data['category'];
 		foreach ([
                      'WCOSAKA2019-SAR44Z' => 'JetPack',
                      'WCOSAKA2019-SOR44Z' => 'JetPack',
